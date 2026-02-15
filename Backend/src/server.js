@@ -4,6 +4,10 @@ import cors from "cors";
 
 
 import { ENV } from "./lib/env.js";
+import { connectDB } from "./lib/db.js";
+import { inngest, functions } from "./lib/inngest.js";
+
+
 
 const app = express();
 
