@@ -1,6 +1,8 @@
 import express from "express";
 import path from "path";
 import cors from "cors";
+import connectDB from "./lib/db.js";
+
 
 
 import { ENV } from "./lib/env.js";
@@ -17,6 +19,10 @@ app.use(express.json());
 
 /* -------------------- Fix __dirname (ESM) -------------------- */
 const __dirname = path.resolve();
+app.get("/", (req, res) => {
+  res.send("InterVue backend is running 🚀");
+});
+
 
 /* -------------------- Health Check -------------------- */
 app.get("/health", (req, res) => {
@@ -45,6 +51,17 @@ if (ENV.NODE_ENV === "production") {
 }
 
 /* -------------------- Start Server -------------------- */
-app.listen(ENV.PORT, () => {
-  console.log(`Server running on port ${ENV.PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(ENV.PORT, () => {
+      console.log("Server is running on port:", ENV.PORT);
+    });
+
+  } catch (error) {
+    console.error("Error starting the server", error);
+  }
+};
+
+startServer();
